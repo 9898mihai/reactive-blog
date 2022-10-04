@@ -17,12 +17,11 @@ export const Login = () => {
   const {
     register,
     handleSubmit,
-    setError,
     formState: { errors, isValid },
   } = useForm({
     defaultValues: {
-      email: 'mihai9898@mail.ru',
-      password: '12345',
+      email: '',
+      password: '',
     },
     mode: 'onChange',
   });
@@ -63,10 +62,17 @@ export const Login = () => {
           label="Password"
           error={Boolean(errors.password?.message)}
           helperText={errors.password?.message}
+          type="password"
           {...register('password', { required: 'Invalid password' })}
           fullWidth
         />
-        <Button type="submit" size="large" variant="contained" fullWidth>
+        <Button
+          disabled={!isValid}
+          type="submit"
+          size="large"
+          variant="contained"
+          fullWidth
+        >
           Login
         </Button>
       </form>
