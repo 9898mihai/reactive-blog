@@ -8,13 +8,15 @@ import 'easymde/dist/easymde.min.css';
 import { useSelector } from 'react-redux';
 import { selectIsAuth } from '../../redux/slices/auth';
 import axios from '../../axios';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 import styles from './AddPost.module.scss';
 
 export const AddPost = () => {
+  const navigate = useNavigate();
   const isAuth = useSelector(selectIsAuth);
-  const [value, setValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [text, setText] = useState('');
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState('');
   const [imageUrl, setImageUrl] = useState('');
@@ -33,11 +35,35 @@ export const AddPost = () => {
     }
   };
 
-  const onClickRemoveImage = () => {};
+  const onClickRemoveImage = () => {
+    setImageUrl('');
+  };
 
   const onChange = useCallback((value) => {
-    setValue(value);
+    setText(value);
   }, []);
+
+  const onSubmit = async () => {
+    try {
+      setIsLoading(true);
+
+      const fields = {
+        title,
+        imageUrl,
+        tags: tags.split(','),
+        text,
+      };
+
+      const { data } = await axios.post('/posts', fields);
+
+      const id = data._id;
+
+      navigate(`/posts/${id}`);
+    } catch (err) {
+      console.warn(err);
+      alert('Error on post adding');
+    }
+  };
 
   const options = useMemo(
     () => ({
@@ -65,7 +91,7 @@ export const AddPost = () => {
         variant="outlined"
         size="large"
       >
-        Download preview
+        Upload Image
       </Button>
       <input
         ref={inputFileRef}
@@ -110,12 +136,12 @@ export const AddPost = () => {
       />
       <SimpleMDE
         className={styles.editor}
-        value={value}
+        value={text}
         onChange={onChange}
         options={options}
       />
       <div className={styles.buttons}>
-        <Button size="large" variant="contained">
+        <Button onClick={onSubmit} size="large" variant="contained">
           Publish
         </Button>
         <a href="/">
