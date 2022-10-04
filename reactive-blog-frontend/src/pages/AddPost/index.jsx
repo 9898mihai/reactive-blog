@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useState, useCallback, useMemo } from 'react';
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
@@ -12,20 +12,21 @@ import { Navigate } from 'react-router-dom';
 import styles from './AddPost.module.scss';
 
 export const AddPost = () => {
-  const isAuth = useSelector(selectIsAuth);
-
   const imageUrl = '';
-  const [value, setValue] = React.useState('');
+  const isAuth = useSelector(selectIsAuth);
+  const [value, setValue] = useState('');
+  const [title, setTitle] = useState('');
+  const [tags, setTags] = useState('');
 
   const handleChangeFile = () => {};
 
   const onClickRemoveImage = () => {};
 
-  const onChange = React.useCallback((value) => {
+  const onChange = useCallback((value) => {
     setValue(value);
   }, []);
 
-  const options = React.useMemo(
+  const options = useMemo(
     () => ({
       spellChecker: false,
       maxHeight: '400px',
@@ -40,7 +41,7 @@ export const AddPost = () => {
     []
   );
 
-  if (!isAuth) {
+  if (!window.localStorage.getItem('token') && !isAuth) {
     return <Navigate to="/" />;
   }
 
@@ -68,12 +69,16 @@ export const AddPost = () => {
         classes={{ root: styles.title }}
         variant="standard"
         placeholder="Article title..."
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
         fullWidth
       />
       <TextField
         classes={{ root: styles.tags }}
         variant="standard"
         placeholder="Tags"
+        value={tags}
+        onChange={(e) => setTags(e.target.value)}
         fullWidth
       />
       <SimpleMDE
