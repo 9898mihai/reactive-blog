@@ -20,12 +20,31 @@ export const getLastTags = async (req, res) => {
 
 export const getAll = async (req, res) => {
   try {
-    const posts = await PostModel.find().populate('user').exec();
+    const posts = await PostModel.find()
+      .sort({ createdAt: 'desc' })
+      .populate('user')
+      .exec();
     res.json(posts);
   } catch (err) {
     console.log(err);
     res.status(500).json({
       message: 'Failed to retrieve articles',
+    });
+  }
+};
+
+export const getPopular = async (req, res) => {
+  try {
+    const posts = await PostModel.find()
+      .sort({ viewsCount: 'desc' })
+      .populate('user')
+      .limit(5)
+      .exec();
+    res.json(posts);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'Failed to retrieve popular articles',
     });
   }
 };
