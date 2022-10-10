@@ -1,23 +1,5 @@
 import PostModel from '../models/Post.js';
 
-export const getLastTags = async (req, res) => {
-  try {
-    const posts = await PostModel.find().limit(5).exec();
-
-    const tags = posts
-      .map((obj) => obj.tags)
-      .flat()
-      .slice(0, 5);
-
-    res.json(tags);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      message: 'Failed to get tags',
-    });
-  }
-};
-
 export const getAll = async (req, res) => {
   try {
     const posts = await PostModel.find()
@@ -84,6 +66,39 @@ export const getOne = async (req, res) => {
     console.log(err);
     res.status(500).json({
       message: 'Failed to retrieve articles',
+    });
+  }
+};
+
+export const getPostsByTag = async (req, res) => {
+  try {
+    const posts = await PostModel.find({ tags: req.params.tag })
+      .sort({ createdAt: 'desc' })
+      .populate('user')
+      .exec();
+    res.json(posts);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'Failed to retrieve articles',
+    });
+  }
+};
+
+export const getLastTags = async (req, res) => {
+  try {
+    const posts = await PostModel.find().limit(5).exec();
+
+    const tags = posts
+      .map((obj) => obj.tags)
+      .flat()
+      .slice(0, 5);
+
+    res.json(tags);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'Failed to get tags',
     });
   }
 };

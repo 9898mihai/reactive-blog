@@ -69,6 +69,7 @@ app.get('/posts', PostController.getAll);
 app.get('/best-posts', PostController.getPopular);
 app.get('/posts/tags', PostController.getLastTags);
 app.get('/tags', PostController.getLastTags);
+app.get('/tags/:tag', PostController.getPostsByTag);
 app.get('/posts/:id', PostController.getOne);
 app.post(
   '/posts',

@@ -14,6 +14,14 @@ export const fetchBestPosts = createAsyncThunk(
   }
 );
 
+export const fetchPostsByTag = createAsyncThunk(
+  'posts/fetchPostsByTag',
+  async (id) => {
+    const { data } = await axios.get(`/tags/${id}`);
+    return data;
+  }
+);
+
 export const fetchTags = createAsyncThunk('posts/fetchTags', async () => {
   const { data } = await axios.get('/tags');
   return data;
@@ -32,6 +40,10 @@ const initialState = {
     status: 'loading',
   },
   bestPosts: {
+    items: [],
+    status: 'loading',
+  },
+  postsByTag: {
     items: [],
     status: 'loading',
   },
@@ -72,6 +84,20 @@ const postsSlice = createSlice({
     [fetchBestPosts.rejected]: (state) => {
       state.bestPosts.items = [];
       state.bestPosts.status = 'error';
+    },
+
+    // Get posts by tag
+    [fetchPostsByTag.pending]: (state) => {
+      state.postsByTag.items = [];
+      state.postsByTag.status = 'loading';
+    },
+    [fetchPostsByTag.fulfilled]: (state, action) => {
+      state.postsByTag.items = action.payload;
+      state.postsByTag.status = 'loaded';
+    },
+    [fetchPostsByTag.rejected]: (state) => {
+      state.postsByTag.items = [];
+      state.postsByTag.status = 'error';
     },
 
     // Get tags
