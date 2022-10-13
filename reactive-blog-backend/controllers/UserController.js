@@ -107,3 +107,52 @@ export const getMe = async (req, res) => {
     });
   }
 };
+
+export const updateMe = async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.userId);
+
+    let hash = '';
+
+    if (req.body.password) {
+      const password = req.body.password;
+      const salt = await bcrypt.genSalt(10);
+      hash = await bcrypt.hash(password, salt);
+    } else {
+      hash = user.passwordHash;
+    }
+
+    await UserModel.updateOne(
+      {
+        _id: user,
+      },
+      {
+        fullName: req.body.fullName,
+        avatarUrl: req.body.avatarUrl,
+        passwordHash: hash,
+      }
+    );
+
+    const token = jwt.sign(
+      {
+        _id: user._id,
+      },
+      'secret123',
+      {
+        expiresIn: '30d',
+      }
+    );
+
+    const { passwordHash, ...userData } = user._doc;
+
+    res.json({
+      ...userData,
+      token,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: 'Failed to update user',
+    });
+  }
+};

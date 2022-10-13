@@ -32,6 +32,9 @@ export const Header = () => {
                 <Link to="/add-post">
                   <Button variant="contained">Write an article</Button>
                 </Link>
+                <Link to="/profile">
+                  <Button variant="outlined">Profile</Button>
+                </Link>
                 <Button
                   onClick={onClickLogout}
                   variant="contained"
