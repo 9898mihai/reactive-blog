@@ -77,6 +77,7 @@ app.get('/tags', PostController.getLastTags);
 app.get('/tags/:tag', PostController.getPostsByTag);
 app.get('/posts/:id', PostController.getOne);
 app.post('/posts/:id/comment', checkAuth, CommentController.addComment);
+app.get('/comments', CommentController.getLastComments);
 app.post(
   '/posts',
   checkAuth,
