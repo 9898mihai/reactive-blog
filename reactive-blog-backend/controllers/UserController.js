@@ -12,7 +12,6 @@ export const register = async (req, res) => {
     const doc = new UserModel({
       email: req.body.email,
       fullName: req.body.fullName,
-      avatarUrl: req.body.avatarUrl,
       passwordHash: hash,
     });
 
@@ -112,7 +111,14 @@ export const updateMe = async (req, res) => {
   try {
     const user = await UserModel.findById(req.userId);
 
+    let fullName = '';
     let hash = '';
+
+    if (req.body.fullName) {
+      fullName = req.body.fullName;
+    } else {
+      fullName = user.fullName;
+    }
 
     if (req.body.password) {
       const password = req.body.password;
@@ -127,7 +133,7 @@ export const updateMe = async (req, res) => {
         _id: user,
       },
       {
-        fullName: req.body.fullName,
+        fullName: fullName,
         avatarUrl: req.body.avatarUrl,
         passwordHash: hash,
       }

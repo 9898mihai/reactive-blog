@@ -87,12 +87,12 @@ export const getPostsByTag = async (req, res) => {
 
 export const getLastTags = async (req, res) => {
   try {
-    const posts = await PostModel.find().limit(5).exec();
+    const posts = await PostModel.find().limit(3).exec();
 
     const tags = posts
       .map((obj) => obj.tags)
       .flat()
-      .slice(0, 5);
+      .slice(0, 3);
 
     res.json(tags);
   } catch (err) {
