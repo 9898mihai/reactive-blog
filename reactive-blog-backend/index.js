@@ -13,7 +13,11 @@ import {
 
 import { checkAuth, handleValidationErrors } from './utils/index.js';
 
-import { UserController, PostController } from './controllers/index.js';
+import {
+  UserController,
+  PostController,
+  CommentController,
+} from './controllers/index.js';
 
 mongoose
   .connect(
@@ -72,6 +76,7 @@ app.get('/posts/tags', PostController.getLastTags);
 app.get('/tags', PostController.getLastTags);
 app.get('/tags/:tag', PostController.getPostsByTag);
 app.get('/posts/:id', PostController.getOne);
+app.post('/posts/:id/comment', checkAuth, CommentController.addComment);
 app.post(
   '/posts',
   checkAuth,
