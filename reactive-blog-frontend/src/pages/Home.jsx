@@ -14,13 +14,14 @@ import {
   fetchBestPosts,
   fetchPostsByTag,
   fetchTags,
+  fetchComments,
 } from '../redux/slices/posts';
 
 export const Home = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth.data);
-  const { posts, bestPosts, postsByTag, tags } = useSelector(
+  const { posts, bestPosts, postsByTag, tags, comments } = useSelector(
     (state) => state.posts
   );
   const [tab, setTab] = useState(0);
@@ -28,11 +29,13 @@ export const Home = () => {
 
   const isPostsLoading = posts.status === 'loading';
   const isTagsLoading = tags.status === 'loading';
+  const isCommentsLoading = comments.status === 'loading';
 
   useEffect(() => {
     dispatch(fetchPosts());
     dispatch(fetchBestPosts());
     dispatch(fetchTags());
+    dispatch(fetchComments());
   }, []);
 
   useEffect(() => {
@@ -86,25 +89,7 @@ export const Home = () => {
         </Grid>
         <Grid xs={4} item>
           <TagsBlock items={tags.items} isLoading={isTagsLoading} />
-          <CommentsBlock
-            items={[
-              {
-                user: {
-                  fullName: 'Joe Doe',
-                  avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
-                },
-                text: 'Test comment',
-              },
-              {
-                user: {
-                  fullName: 'Jack Black',
-                  avatarUrl: 'https://mui.com/static/images/avatar/2.jpg',
-                },
-                text: 'When displaying three lines or more, the avatar is not aligned at the top. You should set the prop to align the avatar at the top',
-              },
-            ]}
-            isLoading={false}
-          />
+          <CommentsBlock items={comments.items} isLoading={isCommentsLoading} />
         </Grid>
       </Grid>
     </>

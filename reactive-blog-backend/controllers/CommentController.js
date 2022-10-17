@@ -27,8 +27,8 @@ export const addComment = async (req, res) => {
 export const getLastComments = async (req, res) => {
   try {
     const comments = await CommentModel.find()
-      .sort({ createdAt: 'desc' })
-      .limit(2)
+      .sort({ date: 'desc' })
+      .limit(3)
       .populate('user')
       .exec();
     res.json(comments);
