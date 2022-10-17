@@ -1,6 +1,6 @@
-import { React, useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
+import { React, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -10,14 +10,14 @@ import Avatar from '@mui/material/Avatar';
 
 import styles from './Profile.module.scss';
 import axios from '../../axios';
-import { fetchRegister, selectIsAuth } from '../../redux/slices/auth';
+import { selectIsAuth } from '../../redux/slices/auth';
 
 export const Profile = () => {
   const isAuth = useSelector(selectIsAuth);
+  const navigate = useNavigate();
   const [fullName, setFullName] = useState('');
-  const dispatch = useDispatch();
+  const [password, setPassword] = useState('');
   const {
-    replace,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({
@@ -28,29 +28,34 @@ export const Profile = () => {
     mode: 'onChange',
   });
 
-  const onSubmit = async (values) => {
-    const data = await dispatch(fetchRegister(values));
+  // useEffect(() => {
+  //   axios
+  //     .get('/auth/me')
+  //     .then(({ data }) => {
+  //       setFullName(data.fullName);
+  //       setPassword(data.password);
+  //     })
+  //     .catch((err) => {
+  //       console.warn(err);
+  //       alert('Can not get user data');
+  //     });
+  // }, []);
 
-    if (!data.payload) {
-      alert('Unable to register');
-    }
+  const onSubmit = async () => {
+    try {
+      const fields = {
+        fullName,
+        password,
+      };
 
-    if ('token' in data.payload) {
-      window.localStorage.setItem('token', data.payload.token);
+      await axios.patch('/update/me', fields);
+
+      navigate('/');
+    } catch (err) {
+      console.warn(err);
+      alert('Error on user updating');
     }
   };
-
-  useEffect(() => {
-    axios
-      .get('/auth/me')
-      .then(({ data }) => {
-        setFullName(data.fullName);
-      })
-      .catch((err) => {
-        console.warn(err);
-        alert('Can not get user data');
-      });
-  }, []);
 
   if (!isAuth) {
     return <Navigate to="/" />;
@@ -59,7 +64,7 @@ export const Profile = () => {
   return (
     <Paper classes={{ root: styles.root }}>
       <Typography classes={{ root: styles.title }} variant="h5">
-        {fullName}
+        Profile
       </Typography>
       <div className={styles.avatar}>
         <Avatar sx={{ width: 100, height: 100 }} />
@@ -68,7 +73,7 @@ export const Profile = () => {
         <TextField
           error={Boolean(errors.fullName?.message)}
           helperText={errors.fullName?.message}
-          {...replace('fullName', { required: 'Invalid name' })}
+          onChange={(e) => setFullName(e.target.value)}
           className={styles.field}
           label="New full name"
           fullWidth
@@ -77,7 +82,7 @@ export const Profile = () => {
           error={Boolean(errors.password?.message)}
           helperText={errors.password?.message}
           type="password"
-          {...replace('password', { required: 'Invalid password' })}
+          onChange={(e) => setPassword(e.target.value)}
           className={styles.field}
           label="New password"
           fullWidth
