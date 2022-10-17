@@ -1,4 +1,5 @@
 import CommentModel from '../models/Comment.js';
+import PostModel from '../models/Post.js';
 
 export const addComment = async (req, res) => {
   try {
@@ -9,6 +10,10 @@ export const addComment = async (req, res) => {
     });
 
     const comment = await doc.save();
+
+    const postRelated = await PostModel.findById(req.params.id);
+    postRelated.comments.push(comment);
+    await postRelated.save();
 
     res.json(comment);
   } catch (err) {
