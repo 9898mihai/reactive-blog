@@ -38,3 +38,26 @@ export const getLastComments = async (req, res) => {
     });
   }
 };
+
+export const removeComment = async (req, res) => {
+  try {
+    const post = await PostModel.findByIdAndUpdate(
+      req.params.postId,
+      {
+        $pull: { comments: req.params.commentId },
+      },
+      { new: true }
+    );
+
+    if (!post) {
+      return res.status(400).send('Post not found');
+    }
+
+    await CommentModel.findByIdAndDelete(req.params.commentId);
+
+    res.send('Comment deleted');
+  } catch (err) {
+    console.log(err);
+    res.status(500).send('Can not delete comment');
+  }
+};

@@ -42,6 +42,13 @@ export const fetchRemovePost = createAsyncThunk(
   }
 );
 
+export const fetchRemoveComment = createAsyncThunk(
+  'posts/fetchRemoveComment',
+  async (params) => {
+    axios.delete(`/comments/${params.id}/${params.commentId}`);
+  }
+);
+
 const initialState = {
   posts: {
     items: [],
@@ -143,6 +150,13 @@ const postsSlice = createSlice({
     // Delete post
     [fetchRemovePost.pending]: (state, action) => {
       state.posts.items = state.posts.items.filter(
+        (obj) => obj._id !== action.meta.arg
+      );
+    },
+
+    // Delete comment
+    [fetchRemoveComment.pending]: (state, action) => {
+      state.comments.items = state.comments.items.filter(
         (obj) => obj._id !== action.meta.arg
       );
     },
