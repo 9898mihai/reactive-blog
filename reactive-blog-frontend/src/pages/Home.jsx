@@ -26,7 +26,6 @@ export const Home = () => {
   );
   const [tab, setTab] = useState(0);
   const hasTag = Boolean(id);
-  console.log(comments);
 
   const isPostsLoading = posts.status === 'loading';
   const isTagsLoading = tags.status === 'loading';
@@ -37,13 +36,13 @@ export const Home = () => {
     dispatch(fetchBestPosts());
     dispatch(fetchTags());
     dispatch(fetchComments());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (id) {
       dispatch(fetchPostsByTag(id));
     }
-  }, [id]);
+  }, [id, dispatch]);
 
   const handleChange = (event, newTab) => {
     setTab(newTab);
