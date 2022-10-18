@@ -17,6 +17,7 @@ export const FullPost = () => {
       .get(`/posts/${id}`)
       .then((res) => {
         setData(res.data);
+        console.log(res.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -45,23 +46,9 @@ export const FullPost = () => {
         <ReactMarkdown children={data.text} />
       </Post>
       <CommentsBlock
-        items={[
-          {
-            user: {
-              fullName: 'Joe Doe',
-              avatarUrl: 'https://mui.com/static/images/avatar/1.jpg',
-            },
-            text: 'Test cooment',
-          },
-          {
-            user: {
-              fullName: 'Jack black',
-              avatarUrl: 'https://mui.com/static/images/avatar/2.jpg',
-            },
-            text: 'When displaying three lines or more, the avatar is not aligned at the top. You should set the prop to align the avatar at the top',
-          },
-        ]}
-        isLoading={false}
+        items={data.comments}
+        user={data.comments.user}
+        isLoading={isLoading}
       >
         <Index />
       </CommentsBlock>

@@ -63,7 +63,12 @@ export const getOne = async (req, res) => {
       }
     )
       .populate('user')
-      .populate('comments');
+      .populate({
+        path: 'comments',
+        populate: {
+          path: 'user',
+        },
+      });
   } catch (err) {
     console.log(err);
     res.status(500).json({

@@ -26,6 +26,7 @@ export const Home = () => {
   );
   const [tab, setTab] = useState(0);
   const hasTag = Boolean(id);
+  console.log(comments);
 
   const isPostsLoading = posts.status === 'loading';
   const isTagsLoading = tags.status === 'loading';
