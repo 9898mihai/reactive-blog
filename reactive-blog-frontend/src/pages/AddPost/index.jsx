@@ -23,7 +23,6 @@ export const AddPost = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const isAuth = useSelector(selectIsAuth);
-  const [isLoading, setIsLoading] = useState(false);
   const [text, setText] = useState('');
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState('');
@@ -55,8 +54,6 @@ export const AddPost = () => {
 
   const onSubmit = async () => {
     try {
-      setIsLoading(true);
-
       const fields = {
         title,
         imageUrl,
@@ -92,7 +89,7 @@ export const AddPost = () => {
           alert('Error on post editing');
         });
     }
-  }, []);
+  }, [id]);
 
   const options = useMemo(
     () => ({

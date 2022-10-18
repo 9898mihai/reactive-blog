@@ -20,9 +20,10 @@ export const Profile = () => {
   const [password, setPassword] = useState('');
   const inputFileRef = useRef(null);
   const [avatarUrl, setAvatarUrl] = useState('');
+  const [isEmpty, setEmpty] = useState(true);
   const {
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm({
     defaultValues: {
       fullName: '',
@@ -30,6 +31,14 @@ export const Profile = () => {
     },
     mode: 'onChange',
   });
+
+  useEffect(() => {
+    if (fullName !== '' || password !== '') {
+      setEmpty(false);
+    } else {
+      setEmpty(true);
+    }
+  }, [fullName, password]);
 
   useEffect(() => {
     axios
@@ -51,6 +60,7 @@ export const Profile = () => {
       formData.append('image', file);
       const { data } = await axios.post('/upload', formData);
       setAvatarUrl(data.url);
+      setEmpty(false);
     } catch (err) {
       console.warn(err);
       alert('Error uploading avatar!');
@@ -115,7 +125,7 @@ export const Profile = () => {
           fullWidth
         />
         <Button
-          disabled={!isValid}
+          disabled={isEmpty}
           type="submit"
           size="large"
           variant="contained"
