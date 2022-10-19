@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { fetchRemovePost } from '../../redux/slices/posts';
 
@@ -29,16 +29,21 @@ export const Post = ({
   isEditable,
 }) => {
   const dispatch = useDispatch();
-
-  if (isLoading) {
-    return <PostSkeleton />;
-  }
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const onClickRemove = () => {
     if (window.confirm('Are you sure you want to delete post?')) {
       dispatch(fetchRemovePost(id));
+      if (location.pathname !== '/') {
+        navigate('/');
+      }
     }
   };
+
+  if (isLoading) {
+    return <PostSkeleton />;
+  }
 
   return (
     <div className={clsx(styles.root, { [styles.rootFull]: isFullPost })}>

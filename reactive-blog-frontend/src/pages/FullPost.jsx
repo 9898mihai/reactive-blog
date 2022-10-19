@@ -14,19 +14,30 @@ export const FullPost = () => {
   const isAuth = useSelector(selectIsAuth);
   const [isLoading, setLoading] = useState(true);
   const { id } = useParams();
+  const userData = useSelector((state) => state.auth.data);
+  const [comments, setComments] = useState([]);
+  const [commentId, setCommentId] = useState('');
+  const [newCommentId, setNewCommentId] = useState('');
+  const handleCommentId = (id) => {
+    setCommentId(id);
+  };
+  const handleNewCommentId = (id) => {
+    setNewCommentId(id);
+  };
 
   useEffect(() => {
     axios
       .get(`/posts/${id}`)
       .then((res) => {
         setData(res.data);
+        setComments(res.data.comments);
         setLoading(false);
       })
       .catch((err) => {
         console.warn(err);
         alert('Error while fetching article');
       });
-  }, [id]);
+  }, [id, commentId, newCommentId]);
 
   if (isLoading) {
     return <Post isLoading={isLoading} isFullPost />;
@@ -44,15 +55,17 @@ export const FullPost = () => {
         commentsCount={data.comments.length}
         tags={data.tags}
         isFullPost
+        isEditable={userData?._id === data.user._id}
       >
         <ReactMarkdown children={data.text} />
       </Post>
       <CommentsBlock
-        items={data.comments}
+        items={comments}
         user={data.comments.user}
         isLoading={isLoading}
+        handleCommentId={handleCommentId}
       >
-        {isAuth && <Index />}
+        {isAuth && <Index handleNewCommentId={handleNewCommentId} />}
       </CommentsBlock>
     </>
   );

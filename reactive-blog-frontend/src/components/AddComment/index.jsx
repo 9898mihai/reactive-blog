@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from '../../axios';
 
@@ -9,9 +9,8 @@ import TextField from '@mui/material/TextField';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 
-export const Index = () => {
+export const Index = ({ handleNewCommentId }) => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.data);
   const [text, setText] = useState('');
   const [isEmpty, setEmpty] = useState(true);
@@ -30,10 +29,9 @@ export const Index = () => {
         text,
       };
 
-      await axios.post(`/posts/${id}/comment`, fields);
-
+      const { data } = await axios.post(`/posts/${id}/comment`, fields);
+      handleNewCommentId(data._id);
       setText('');
-      navigate(0);
     } catch (err) {
       console.warn(err);
       alert('Error on comment adding');
