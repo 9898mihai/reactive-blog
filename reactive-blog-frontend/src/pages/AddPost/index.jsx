@@ -9,6 +9,7 @@ import {
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
+import ImageIcon from '@mui/icons-material/Image';
 import SimpleMDE from 'react-simplemde-editor';
 
 import 'easymde/dist/easymde.min.css';
@@ -116,6 +117,7 @@ export const AddPost = () => {
         onClick={() => inputFileRef.current.click()}
         variant="outlined"
         size="large"
+        startIcon={<ImageIcon />}
       >
         Upload Image
       </Button>

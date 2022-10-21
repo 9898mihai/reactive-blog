@@ -110,22 +110,35 @@ export const getMe = async (req, res) => {
 export const updateMe = async (req, res) => {
   try {
     const user = await UserModel.findById(req.userId);
-
-    let fullName = '';
-    let hash = '';
+    let fullName = user.fullName;
+    let hash = user.passwordHash;
 
     if (req.body.fullName) {
-      fullName = req.body.fullName;
-    } else {
-      fullName = user.fullName;
+      fullName = await req.body.fullName;
     }
 
-    if (req.body.password) {
-      const password = req.body.password;
-      const salt = await bcrypt.genSalt(10);
-      hash = await bcrypt.hash(password, salt);
-    } else {
-      hash = user.passwordHash;
+    if (
+      req.body.fullName &&
+      req.body.currentPassword &&
+      req.body.newPassword === ''
+    ) {
+      return res.status(400).json({
+        message: 'Incorrect password',
+      });
+    }
+
+    if (req.body.currentPassword && req.body.newPassword) {
+      const isValidPass = await bcrypt.compare(req.body.currentPassword, hash);
+
+      if (isValidPass) {
+        const password = await req.body.newPassword;
+        const salt = await bcrypt.genSalt(10);
+        hash = await bcrypt.hash(password, salt);
+      } else {
+        return res.status(400).json({
+          message: 'Incorrect password',
+        });
+      }
     }
 
     await UserModel.updateOne(
