@@ -1,4 +1,6 @@
 import PostModel from '../models/Post.js';
+import CommentModel from '../models/Comment.js';
+import UserModel from '../models/User.js';
 
 export const getAll = async (req, res) => {
   try {
@@ -111,38 +113,25 @@ export const getLastTags = async (req, res) => {
 };
 
 export const remove = async (req, res) => {
-  try {
-    const postId = req.params.id;
-
-    PostModel.findOneAndDelete(
-      {
-        _id: postId,
-      },
-      (err, doc) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({
-            message: 'Failed to delete article',
-          });
-        }
-
-        if (!doc) {
-          return res.status(404).json({
-            message: 'Article not found',
-          });
-        }
-
-        res.json({
-          success: true,
+  PostModel.findOneAndRemove({ _id: req.params.id })
+    .populate('comments')
+    .then(async (foundPost) => {
+      // delete Comment references from User
+      await foundPost.comments.forEach(async (comment) => {
+        await UserModel.findByIdAndUpdate(comment.user._id, {
+          $pull: { comments: comment._id },
         });
-      }
-    );
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      message: 'Failed to retrieve articles',
-    });
-  }
+      });
+      // delete Post reference from User author
+      await UserModel.findByIdAndUpdate(foundPost.user, {
+        $pull: { posts: foundPost._id },
+      });
+      // delete all child Comments
+      await CommentModel.deleteMany({
+        post: foundPost._id,
+      });
+    })
+    .catch(() => res.status(500).json({ message: 'Failed to delete post' }));
 };
 
 export const create = async (req, res) => {
@@ -156,6 +145,10 @@ export const create = async (req, res) => {
     });
 
     const post = await doc.save();
+
+    const userRelated = await UserModel.findById(req.userId);
+    userRelated.posts.push(post);
+    await userRelated.save();
 
     res.json(post);
   } catch (err) {

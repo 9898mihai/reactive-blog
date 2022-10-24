@@ -16,6 +16,18 @@ const UserSchema = new mongoose.Schema(
       required: true,
     },
     avatarUrl: String,
+    posts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post',
+      },
+    ],
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment',
+      },
+    ],
   },
   {
     timestamps: true,

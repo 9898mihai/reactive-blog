@@ -1,5 +1,6 @@
 import CommentModel from '../models/Comment.js';
 import PostModel from '../models/Post.js';
+import UserModel from '../models/User.js';
 
 export const addComment = async (req, res) => {
   try {
@@ -14,6 +15,10 @@ export const addComment = async (req, res) => {
     const postRelated = await PostModel.findById(req.params.id);
     postRelated.comments.push(comment);
     await postRelated.save();
+
+    const userRelated = await UserModel.findById(req.userId);
+    userRelated.comments.push(comment);
+    await userRelated.save();
 
     res.json(comment);
   } catch (err) {
@@ -51,6 +56,18 @@ export const removeComment = async (req, res) => {
 
     if (!post) {
       return res.status(400).send('Post not found');
+    }
+
+    const user = await UserModel.findByIdAndUpdate(
+      req.userId,
+      {
+        $pull: { comments: req.params.commentId },
+      },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(400).send('User not found');
     }
 
     await CommentModel.findByIdAndDelete(req.params.commentId);

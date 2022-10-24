@@ -71,7 +71,7 @@ export const Header = () => {
                   </Button>
                   {open ? (
                     <Box sx={customStyles}>
-                      <Link to="/add-post">
+                      <Link to="/my-account">
                         <Button
                           onClick={handleClick}
                           variant="contained"
