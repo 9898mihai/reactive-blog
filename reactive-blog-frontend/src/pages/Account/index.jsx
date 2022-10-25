@@ -15,11 +15,11 @@ import AlertTitle from '@mui/material/AlertTitle';
 import Collapse from '@mui/material/Collapse';
 import Box from '@mui/material/Box';
 
-import styles from './Settings.module.scss';
+import styles from './Account.module.scss';
 import axios from '../../axios';
 import { selectIsAuth } from '../../redux/slices/auth';
 
-export const Settings = () => {
+export const Account = () => {
   const isAuth = useSelector(selectIsAuth);
   const [oldFullName, setOldFullName] = useState('');
   const [fullName, setFullName] = useState('');

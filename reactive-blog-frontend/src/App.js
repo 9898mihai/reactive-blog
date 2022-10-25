@@ -10,8 +10,8 @@ import {
   Registration,
   AddPost,
   Login,
-  MyAccount,
-  Settings,
+  Profile,
+  Account,
 } from './pages';
 import { fetchAuthMe } from './redux/slices/auth';
 
@@ -34,8 +34,8 @@ function App() {
           <Route path="/add-post" element={<AddPost />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Registration />} />
-          <Route path="/my-account" element={<MyAccount />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/account" element={<Account />} />
         </Routes>
       </Container>
     </>

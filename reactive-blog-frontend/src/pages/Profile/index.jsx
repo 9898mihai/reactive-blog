@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useRef } from 'react';
+import { React, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
@@ -9,11 +9,11 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 
-import styles from './MyAccount.module.scss';
+import styles from './Profile.module.scss';
 import axios from '../../axios';
 import { selectIsAuth } from '../../redux/slices/auth';
 
-export const MyAccount = () => {
+export const Profile = () => {
   const isAuth = useSelector(selectIsAuth);
   const [avatarUrl, setAvatarUrl] = useState('');
   const [fullName, setFullName] = useState('');
