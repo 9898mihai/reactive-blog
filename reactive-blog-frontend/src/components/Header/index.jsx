@@ -45,17 +45,19 @@ export const Header = () => {
   const [fullName, setFullName] = useState('');
 
   useEffect(() => {
-    axios
-      .get('/auth/me')
-      .then(({ data }) => {
-        setAvatarUrl(data.avatarUrl);
-        setFullName(data.fullName);
-      })
-      .catch((err) => {
-        console.warn(err);
-        alert('Can not get user data');
-      });
-  }, []);
+    if (isAuth) {
+      axios
+        .get('/auth/me')
+        .then(({ data }) => {
+          setAvatarUrl(data.avatarUrl);
+          setFullName(data.fullName);
+        })
+        .catch((err) => {
+          console.warn(err);
+          alert('Can not get user data');
+        });
+    }
+  }, [isAuth]);
 
   const onClickLogout = () => {
     if (window.confirm('Are you sure you want to logout?')) {
@@ -65,7 +67,7 @@ export const Header = () => {
   };
 
   return (
-    <AppBar className={styles.root} position="static">
+    <AppBar className={styles.root} position="sticky">
       <Container maxWidth="lg">
         <Toolbar disableGutters>
           <RocketIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />

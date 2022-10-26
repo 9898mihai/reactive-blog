@@ -8,10 +8,14 @@ import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 import styles from './Profile.module.scss';
 import axios from '../../axios';
 import { selectIsAuth } from '../../redux/slices/auth';
+import { MyPost } from './MyPost';
+import { MyComment } from './MyPost/MyComment';
 
 export const Profile = () => {
   const isAuth = useSelector(selectIsAuth);
@@ -19,6 +23,19 @@ export const Profile = () => {
   const [fullName, setFullName] = useState('');
   const [posts, setPosts] = useState('');
   const [comments, setComments] = useState('');
+  const [tab, setTab] = useState(0);
+  const [postDeleted, setPostDeleted] = useState('');
+  const [commentDeleted, setCommentDeleted] = useState('');
+  const handlePostDeleted = (id) => {
+    setPostDeleted(id);
+  };
+  const handleCommentDeleted = (id) => {
+    setCommentDeleted(id);
+  };
+
+  const handleChange = (event, newTab) => {
+    setTab(newTab);
+  };
 
   useEffect(() => {
     axios
@@ -26,14 +43,16 @@ export const Profile = () => {
       .then(({ data }) => {
         setAvatarUrl(data.avatarUrl);
         setFullName(data.fullName);
-        setPosts(data.posts);
-        setComments(data.comments);
+        setPosts(data.posts.filter((post) => post._id !== postDeleted));
+        setComments(
+          data.comments.filter((comment) => comment._id !== commentDeleted)
+        );
       })
       .catch((err) => {
         console.warn(err);
         alert('Can not get user data');
       });
-  }, []);
+  }, [postDeleted, commentDeleted]);
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: '#FFF',
@@ -50,9 +69,9 @@ export const Profile = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Grid classes={{ root: styles.root }} container spacing={2}>
+      <Grid container spacing={2}>
         <Grid item xs={12} md={4}>
-          <Item>
+          <Item classes={{ root: styles.profile }}>
             <div className={styles.avatar}>
               <Avatar
                 sx={{ width: 100, height: 100 }}
@@ -74,35 +93,42 @@ export const Profile = () => {
           </Item>
         </Grid>
         <Grid item xs={12} md={8}>
-          <Item>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum. Lorem Ipsum is simply
-            dummy text of the printing and typesetting industry. Lorem Ipsum has
-            been the industry's standard dummy text ever since the 1500s, when
-            an unknown printer took a galley of type and scrambled it to make a
-            type specimen book. It has survived not only five centuries, but
-            also the leap into electronic typesetting, remaining essentially
-            unchanged. It was popularised in the 1960s with the release of
-            Letraset sheets containing Lorem Ipsum passages, and more recently
-            with desktop publishing software like Aldus PageMaker including
-            versions of Lorem Ipsum. Lorem Ipsum is simply dummy text of the
-            printing and typesetting industry. Lorem Ipsum has been the
-            industry's standard dummy text ever since the 1500s, when an unknown
-            printer took a galley of type and scrambled it to make a type
-            specimen book. It has survived not only five centuries, but also the
-            leap into electronic typesetting, remaining essentially unchanged.
-            It was popularised in the 1960s with the release of Letraset sheets
-            containing Lorem Ipsum passages, and more recently with desktop
-            publishing software like Aldus PageMaker including versions of Lorem
-            Ipsum.
-          </Item>
+          <Tabs
+            style={{ marginBottom: 15 }}
+            value={tab}
+            onChange={handleChange}
+          >
+            <Tab label="Posts" />
+            <Tab label="Commnets" />
+          </Tabs>
+          {tab === 0
+            ? Array.from(posts)
+                .reverse()
+                .map((obj, index) => (
+                  <MyPost
+                    key={index}
+                    id={obj._id}
+                    title={obj.title}
+                    createdAt={new Date(obj.createdAt).toLocaleDateString()}
+                    viewsCount={obj.viewsCount}
+                    commentsCount={obj.comments.length}
+                    isEditable
+                    handlePostDeleted={handlePostDeleted}
+                  />
+                ))
+            : Array.from(comments)
+                .reverse()
+                .map((obj, index) => (
+                  <MyComment
+                    key={index}
+                    postId={obj.post}
+                    commentId={obj._id}
+                    text={obj.text}
+                    createdAt={new Date(obj.date).toLocaleDateString()}
+                    isEditable
+                    handleCommentDeleted={handleCommentDeleted}
+                  />
+                ))}
         </Grid>
       </Grid>
     </Box>

@@ -45,7 +45,7 @@ export const fetchRemovePost = createAsyncThunk(
 export const fetchRemoveComment = createAsyncThunk(
   'posts/fetchRemoveComment',
   async (params) => {
-    axios.delete(`/comments/${params.id}/${params.commentId}`);
+    axios.delete(`/comments/${params.postId}/${params.commentId}`);
   }
 );
 

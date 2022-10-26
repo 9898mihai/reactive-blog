@@ -43,7 +43,10 @@ export const Registration = () => {
   }
 
   return (
-    <Paper classes={{ root: styles.root }}>
+    <Paper
+      classes={{ root: styles.root }}
+      sx={{ width: { xs: '100%', sm: '400px' } }}
+    >
       <Typography classes={{ root: styles.title }} variant="h5">
         Create an account
       </Typography>

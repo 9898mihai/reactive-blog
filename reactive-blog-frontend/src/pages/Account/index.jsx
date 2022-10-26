@@ -96,7 +96,7 @@ export const Account = () => {
         console.warn(err);
         alert('Can not get user data');
       });
-  }, []);
+  }, [isAuth]);
 
   const onSubmit = async () => {
     try {
@@ -113,7 +113,6 @@ export const Account = () => {
       setError(false);
     } catch (err) {
       console.warn(err);
-      // alert('Error on user updating');
       setError(true);
       setSuccess(false);
     }
@@ -124,7 +123,10 @@ export const Account = () => {
   }
 
   return (
-    <Paper classes={{ root: styles.root }}>
+    <Paper
+      classes={{ root: styles.root }}
+      sx={{ width: { xs: '100%', sm: '400px' } }}
+    >
       <Typography classes={{ root: styles.title }} variant="h5">
         {oldFullName}
       </Typography>

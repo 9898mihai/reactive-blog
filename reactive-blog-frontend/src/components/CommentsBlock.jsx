@@ -30,8 +30,8 @@ export const CommentsBlock = ({
   const onClickRemove = async (commentId) => {
     if (window.confirm('Are you sure you want to delete comment?')) {
       let params = {
-        id,
-        commentId,
+        postId: id,
+        commentId: commentId,
       };
       dispatch(fetchRemoveComment(params));
       handleCommentId(commentId);
@@ -76,7 +76,11 @@ export const CommentsBlock = ({
               ) : (
                 <ListItemText
                   primary={obj.user.fullName}
-                  secondary={obj.text}
+                  secondary={
+                    location.pathname !== '/'
+                      ? obj.text
+                      : obj.text.slice(0, 200)
+                  }
                 />
               )}
             </ListItem>

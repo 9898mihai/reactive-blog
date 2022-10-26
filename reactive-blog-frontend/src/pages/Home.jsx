@@ -60,7 +60,7 @@ export const Home = () => {
       )}
 
       <Grid container spacing={4}>
-        <Grid xs={8} item>
+        <Grid sm={8} item>
           {(hasTag
             ? postsByTag?.items
             : tab === 0
@@ -87,7 +87,7 @@ export const Home = () => {
             )
           )}
         </Grid>
-        <Grid xs={4} item>
+        <Grid sm={4} item>
           <TagsBlock items={tags.items} isLoading={isTagsLoading} />
           <CommentsBlock items={comments.items} isLoading={isCommentsLoading} />
         </Grid>
