@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, Link } from 'react-router-dom';
 
 import { SideBlock } from './SideBlock';
 import ListItem from '@mui/material/ListItem';
@@ -15,6 +15,7 @@ import DeleteIcon from '@mui/icons-material/Clear';
 import styles from './Post/Post.module.scss';
 
 import { fetchRemoveComment } from '../redux/slices/posts';
+import { selectIsAuth } from '../redux/slices/auth';
 
 export const CommentsBlock = ({
   items,
@@ -26,6 +27,7 @@ export const CommentsBlock = ({
   const userData = useSelector((state) => state.auth.data);
   const { id } = useParams();
   const location = useLocation();
+  const isAuth = useSelector(selectIsAuth);
 
   const onClickRemove = async (commentId) => {
     if (window.confirm('Are you sure you want to delete comment?')) {
@@ -57,6 +59,17 @@ export const CommentsBlock = ({
               <ListItemAvatar>
                 {isLoading ? (
                   <Skeleton variant="circular" width={40} height={40} />
+                ) : isAuth ? (
+                  <Link to={`/profile/${obj.user._id}`}>
+                    <Avatar
+                      alt={obj.user.fullName}
+                      src={
+                        obj.user.avatarUrl
+                          ? `http://localhost:4444${obj.user.avatarUrl}`
+                          : ''
+                      }
+                    />
+                  </Link>
                 ) : (
                   <Avatar
                     alt={obj.user.fullName}

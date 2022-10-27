@@ -18,6 +18,15 @@
 .userDetails {
   display: flex;
   flex-direction: column;
+
+  a {
+    text-decoration: none;
+    color: #000;
+
+    &:hover {
+      color: #4361ee;
+    }
+  }
 }
 
 .additional {

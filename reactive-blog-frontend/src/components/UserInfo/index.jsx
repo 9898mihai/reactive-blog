@@ -1,16 +1,41 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import styles from './UserInfo.module.scss';
+import { selectIsAuth } from '../../redux/slices/auth';
 
-export const UserInfo = ({ avatarUrl, fullName, additionalText }) => {
+export const UserInfo = ({ _id, avatarUrl, fullName, additionalText }) => {
+  const isAuth = useSelector(selectIsAuth);
+
   return (
     <div className={styles.root}>
-      <img
-        className={styles.avatar}
-        src={avatarUrl ? `http://localhost:4444${avatarUrl}` : '/noavatar.png'}
-        alt={fullName}
-      />
+      {isAuth ? (
+        <Link to={`/profile/${_id}`}>
+          <img
+            className={styles.avatar}
+            src={
+              avatarUrl ? `http://localhost:4444${avatarUrl}` : '/noavatar.png'
+            }
+            alt={fullName}
+          />
+        </Link>
+      ) : (
+        <img
+          className={styles.avatar}
+          src={
+            avatarUrl ? `http://localhost:4444${avatarUrl}` : '/noavatar.png'
+          }
+          alt={fullName}
+        />
+      )}
       <div className={styles.userDetails}>
-        <span className={styles.userName}>{fullName}</span>
+        {isAuth ? (
+          <Link to={`/profile/${_id}`}>
+            <span className={styles.userName}>{fullName}</span>
+          </Link>
+        ) : (
+          <span className={styles.userName}>{fullName}</span>
+        )}
         <span className={styles.additional}>{additionalText}</span>
       </div>
     </div>

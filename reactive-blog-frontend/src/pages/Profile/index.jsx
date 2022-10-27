@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
@@ -19,6 +19,9 @@ import { MyComment } from './MyPost/MyComment';
 
 export const Profile = () => {
   const isAuth = useSelector(selectIsAuth);
+  const { id } = useParams();
+  const userData = useSelector((state) => state.auth.data);
+  const isMe = userData?._id === id;
   const [avatarUrl, setAvatarUrl] = useState('');
   const [fullName, setFullName] = useState('');
   const [posts, setPosts] = useState('');
@@ -39,7 +42,7 @@ export const Profile = () => {
 
   useEffect(() => {
     axios
-      .get('/auth/me')
+      .get(`/profile/${id}`)
       .then(({ data }) => {
         setAvatarUrl(data.avatarUrl);
         setFullName(data.fullName);
@@ -52,7 +55,7 @@ export const Profile = () => {
         console.warn(err);
         alert('Can not get user data');
       });
-  }, [postDeleted, commentDeleted]);
+  }, [id, postDeleted, commentDeleted]);
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: '#FFF',
@@ -112,7 +115,7 @@ export const Profile = () => {
                     createdAt={new Date(obj.createdAt).toLocaleDateString()}
                     viewsCount={obj.viewsCount}
                     commentsCount={obj.comments.length}
-                    isEditable
+                    isEditable={isMe}
                     handlePostDeleted={handlePostDeleted}
                   />
                 ))
@@ -125,7 +128,7 @@ export const Profile = () => {
                     commentId={obj._id}
                     text={obj.text}
                     createdAt={new Date(obj.date).toLocaleDateString()}
-                    isEditable
+                    isEditable={isMe}
                     handleCommentDeleted={handleCommentDeleted}
                   />
                 ))}

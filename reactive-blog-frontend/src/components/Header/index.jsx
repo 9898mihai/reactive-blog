@@ -43,6 +43,7 @@ export const Header = () => {
   const isAuth = useSelector(selectIsAuth);
   const [avatarUrl, setAvatarUrl] = useState('');
   const [fullName, setFullName] = useState('');
+  const [authId, setAuthId] = useState('');
 
   useEffect(() => {
     if (isAuth) {
@@ -51,6 +52,7 @@ export const Header = () => {
         .then(({ data }) => {
           setAvatarUrl(data.avatarUrl);
           setFullName(data.fullName);
+          setAuthId(data._id);
         })
         .catch((err) => {
           console.warn(err);
@@ -191,9 +193,10 @@ export const Header = () => {
                 }}
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
+                className={styles.profileItems}
               >
                 <MenuItem onClick={handleCloseUserMenu}>
-                  <Link to="/profile">Profile</Link>
+                  <Link to={`/profile/${authId}`}>Profile</Link>
                 </MenuItem>
                 <MenuItem onClick={handleCloseUserMenu}>
                   <Link to="/account">Account</Link>

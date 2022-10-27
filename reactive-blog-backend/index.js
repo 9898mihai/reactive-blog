@@ -63,6 +63,7 @@ app.post(
 );
 app.get('/auth/me', checkAuth, UserController.getMe);
 app.patch('/update/me', checkAuth, UserController.updateMe);
+app.get('/profile/:id', UserController.getUser);
 
 app.post('/upload', checkAuth, upload.single('image'), (req, res) => {
   res.json({
@@ -93,8 +94,8 @@ app.post(
 app.delete('/posts/:id', checkAuth, PostController.remove);
 app.patch(
   '/posts/:id',
-  postCreateValidation,
   checkAuth,
+  postCreateValidation,
   handleValidationErrors,
   PostController.update
 );
