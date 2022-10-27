@@ -121,17 +121,23 @@ export const Header = () => {
               }}
             >
               {isAuth ? (
-                <MenuItem onClick={handleCloseNavMenu}>
-                  <Link to="/add-post">Write an article</Link>
-                </MenuItem>
+                <div className={styles.hamburger}>
+                  <Link to="/add-post">
+                    <MenuItem onClick={handleCloseNavMenu}>
+                      Write an article
+                    </MenuItem>
+                  </Link>
+                </div>
               ) : (
-                <div>
-                  <MenuItem onClick={handleCloseNavMenu}>
-                    <Link to="/login">Login</Link>
-                  </MenuItem>
-                  <MenuItem onClick={handleCloseNavMenu}>
-                    <Link to="/register">Create account</Link>
-                  </MenuItem>
+                <div className={styles.hamburger}>
+                  <Link to="/login">
+                    <MenuItem onClick={handleCloseNavMenu}>Login</MenuItem>
+                  </Link>
+                  <Link to="/register">
+                    <MenuItem onClick={handleCloseNavMenu}>
+                      Create account
+                    </MenuItem>
+                  </Link>
                 </div>
               )}
             </Menu>
@@ -155,17 +161,27 @@ export const Header = () => {
           >
             MERN
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            <Button onClick={handleCloseNavMenu} sx={{ my: 2 }}>
-              {isAuth ? (
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: 'none', md: 'flex' },
+              justifyContent: isAuth ? 'flex-start' : 'flex-end',
+            }}
+          >
+            {isAuth ? (
+              <Button onClick={handleCloseNavMenu} sx={{ my: 2 }}>
                 <Link to="/add-post">Write an article</Link>
-              ) : (
-                <>
+              </Button>
+            ) : (
+              <>
+                <Button onClick={handleCloseNavMenu} sx={{ my: 2 }}>
                   <Link to="/login">Login</Link>
+                </Button>
+                <Button onClick={handleCloseNavMenu} sx={{ my: 2 }}>
                   <Link to="/register">Create account</Link>
-                </>
-              )}
-            </Button>
+                </Button>
+              </>
+            )}
           </Box>
 
           {isAuth && (
@@ -195,12 +211,12 @@ export const Header = () => {
                 onClose={handleCloseUserMenu}
                 className={styles.profileItems}
               >
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Link to={`/profile/${authId}`}>Profile</Link>
-                </MenuItem>
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Link to="/account">Account</Link>
-                </MenuItem>
+                <Link to={`/profile/${authId}`}>
+                  <MenuItem onClick={handleCloseUserMenu}>Profile</MenuItem>
+                </Link>
+                <Link to="/account">
+                  <MenuItem onClick={handleCloseUserMenu}>Account</MenuItem>
+                </Link>
                 <MenuItem onClick={handleCloseUserMenu}>
                   <Typography sx={{ margin: '0 10px' }} onClick={onClickLogout}>
                     Logout

@@ -4,14 +4,25 @@
   margin-bottom: 30px;
 }
 
-button a {
-  text-decoration: none;
-  color: #fff;
-  margin: 0 10px;
+button {
+  a {
+    text-decoration: none;
+    color: #fff;
+    li {
+      display: flex;
+      justify-content: center;
+    }
+  }
 }
 
-.profileItems ul li a {
-  text-decoration: none;
-  color: #000;
-  margin: 0 10px;
+.hamburger,
+.profileItems {
+  a {
+    text-decoration: none;
+    color: #000;
+    li {
+      display: flex;
+      justify-content: center;
+    }
+  }
 }

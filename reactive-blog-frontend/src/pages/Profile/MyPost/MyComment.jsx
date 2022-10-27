@@ -47,9 +47,9 @@ export const MyComment = ({
         <div className={styles.date}>{createdAt}</div>
 
         <div className={styles.indention}>
-          <p className={clsx(styles.comment)}>
-            <Link to={`/posts/${postId}`}>{text}</Link>
-          </p>
+          <Link to={`/posts/${postId}`}>
+            <p>{text}</p>
+          </Link>
         </div>
       </div>
     </div>
