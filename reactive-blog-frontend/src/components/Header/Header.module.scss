@@ -17,12 +17,15 @@ button {
 
 .hamburger,
 .profileItems {
-  a {
-    text-decoration: none;
-    color: #000;
-    li {
-      display: flex;
-      justify-content: center;
+  ul{
+    padding: 0;
+    a {
+      text-decoration: none;
+      color: #000;
+      li {
+        display: flex;
+        justify-content: center;
+      }
     }
   }
 }
