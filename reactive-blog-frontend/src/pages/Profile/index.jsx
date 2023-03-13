@@ -78,7 +78,7 @@ export const Profile = () => {
             <div className={styles.avatar}>
               <Avatar
                 sx={{ width: 100, height: 100 }}
-                src={avatarUrl ? `http://localhost:4444${avatarUrl}` : ''}
+                src={avatarUrl ? `${process.env.REACT_APP_API_URL || 'http://localhost:4444'}${avatarUrl}` : ''}
               />
             </div>
             <Typography classes={{ root: styles.title }} variant="h5">

@@ -14,7 +14,7 @@ export const UserInfo = ({ _id, avatarUrl, fullName, additionalText }) => {
           <img
             className={styles.avatar}
             src={
-              avatarUrl ? `http://localhost:4444${avatarUrl}` : '/noavatar.png'
+              avatarUrl ? `${process.env.REACT_APP_API_URL || 'http://localhost:4444'}${avatarUrl}` : '/noavatar.png'
             }
             alt={fullName}
           />
@@ -23,7 +23,7 @@ export const UserInfo = ({ _id, avatarUrl, fullName, additionalText }) => {
         <img
           className={styles.avatar}
           src={
-            avatarUrl ? `http://localhost:4444${avatarUrl}` : '/noavatar.png'
+            avatarUrl ? `${process.env.REACT_APP_API_URL || 'http://localhost:4444'}${avatarUrl}` : '/noavatar.png'
           }
           alt={fullName}
         />

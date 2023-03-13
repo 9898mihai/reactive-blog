@@ -190,7 +190,7 @@ export const Header = () => {
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
                     alt={fullName}
-                    src={avatarUrl ? `http://localhost:4444${avatarUrl}` : ''}
+                    src={avatarUrl ? `${process.env.REACT_APP_API_URL || 'http://localhost:4444'}${avatarUrl}` : ''}
                   />
                 </IconButton>
               </Tooltip>
