@@ -20,9 +20,7 @@ import {
 } from './controllers/index.js';
 
 mongoose
-  .connect(
-    'mongodb+srv://mongouser:mongopassword@cluster0.6gsww4w.mongodb.net/blog?retryWrites=true&w=majority'
-  )
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log('db OK'))
   .catch((err) => console.log('DB error', err));
 
@@ -46,7 +44,7 @@ const upload = multer({ storage });
 app.use(express.json());
 app.use(cors());
 app.get('/', (req, res) => {
-  res.send('hello!');
+  res.send('Backend is Live!');
 });
 
 app.post(
@@ -100,7 +98,7 @@ app.patch(
   PostController.update
 );
 
-app.listen(4444, (err) => {
+app.listen(process.env.PORT || 4444, (err) => {
   if (err) {
     return console.error(err);
   }
