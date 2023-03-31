@@ -20,7 +20,7 @@ import {
 } from './controllers/index.js';
 
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(process.env.MONGODB_URI || 'mongodb+srv://mongouser:mongopassword@cluster0.6gsww4w.mongodb.net/blog?retryWrites=true&w=majority')
   .then(() => console.log('db OK'))
   .catch((err) => console.log('DB error', err));
 

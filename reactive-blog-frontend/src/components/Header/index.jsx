@@ -119,9 +119,10 @@ export const Header = () => {
               sx={{
                 display: { xs: 'block', md: 'none' },
               }}
+              className={styles.hamburger}
             >
               {isAuth ? (
-                <div className={styles.hamburger}>
+                <div>
                   <Link to="/add-post">
                     <MenuItem onClick={handleCloseNavMenu}>
                       Write an article
@@ -129,7 +130,7 @@ export const Header = () => {
                   </Link>
                 </div>
               ) : (
-                <div className={styles.hamburger}>
+                <div>
                   <Link to="/login">
                     <MenuItem onClick={handleCloseNavMenu}>Login</MenuItem>
                   </Link>
